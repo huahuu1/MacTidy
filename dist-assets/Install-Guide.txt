@@ -1,0 +1,92 @@
+MACTIDY: INSTALL GUIDE
+=======================
+
+Requirements
+------------
+- macOS 14 or later. Runs on Apple silicon (M1 to M4) and Intel Macs.
+- Gap-free menu bar icon hiding needs macOS 27.
+  Older macOS versions can still hide icons, using the older method.
+
+
+1. Install
+----------
+1. Open MacTidy-x.x.dmg.
+2. Drag MacTidy into the Applications folder (it must be /Applications).
+   On macOS 27, only apps in /Applications keep their menu bar icons visible
+   while icons are hidden. Installed anywhere else, MacTidy hides its own icon too.
+3. Close the DMG window and eject the MacTidy disk.
+
+
+2. First launch
+---------------
+The app is not signed with an Apple Developer ID certificate, so macOS blocks
+the first launch ("can't be opened" or "developer cannot be verified").
+Pick ONE of these:
+
+Option A (Settings):
+  1. Open MacTidy and click Done when macOS blocks it.
+  2. Go to System Settings > Privacy & Security.
+  3. Scroll down to Security, click "Open Anyway" next to MacTidy, enter your password.
+
+Option B (Terminal), run this, then open the app as usual:
+  xattr -dr com.apple.quarantine /Applications/MacTidy.app
+
+
+3. Language
+-----------
+MacTidy follows your macOS language (Vietnamese or English; any other language
+shows English). To change it: click the globe button at the top of the sidebar,
+or the MacTidy menu bar item > gear icon > Ngôn ngữ / Language.
+The app restarts in the new language.
+
+
+4. Permissions (only for the features that need them)
+-----------------------------------------------------
+- Accessibility: needed for the "Hide menu bar icons" page.
+  System Settings > Privacy & Security > Accessibility > turn on MacTidy.
+- Notifications: lets MacTidy warn you when your Mac gets hot. macOS asks on first launch.
+- Open at login: click the MacTidy menu bar item > gear icon > Open at login.
+
+
+5. Connect Claude (for the "Ask AI" button)
+-------------------------------------------
+The "Ask AI" button on the Cleanup and Large Files pages calls Claude Code
+(the `claude` command) installed on THAT Mac. MacTidy stores no account or API key;
+each Mac uses its own Claude Code account, and usage is billed to that account.
+
+Step 1. Install Claude Code (pick one):
+  - Recommended, run in Terminal:
+      curl -fsSL https://claude.ai/install.sh | bash
+  - Or with npm (needs Node.js 18 or later):
+      npm install -g @anthropic-ai/claude-code
+
+Step 2. Sign in: open Terminal and type
+      claude
+  then follow the steps on screen to sign in with your Claude account
+  (Pro, Max, Team, Enterprise) or a Claude Console (API) account.
+  When done, type /exit.
+
+Step 3. Nothing to configure in MacTidy. The app looks for `claude` in:
+      ~/.local/bin/claude
+      /opt/homebrew/bin/claude
+      /usr/local/bin/claude
+      ~/.claude/local/claude
+      the Node bin folder of nvm installs
+  If MacTidy was open while you installed Claude Code, quit and reopen MacTidy.
+
+Step 4. Test: MacTidy > Cleanup > Scan > hover an item > click "Ask AI".
+  The answer shows under the item, with the cost of that question.
+
+If "Ask AI" is greyed out: the Mac has no `claude` command yet, redo Step 1.
+If you get a sign-in error: run `claude` in Terminal to sign in again (Step 2).
+
+Claude can only READ files (the Read, Glob and Grep tools). It can't run commands,
+edit or delete files. Deleting is always your click.
+
+
+6. Uninstall
+------------
+1. Click the MacTidy menu bar item > gear icon > Quit MacTidy.
+2. Drag /Applications/MacTidy.app to the Trash.
+3. (Optional) remove settings: run in Terminal
+      defaults delete io.github.huahuu1.mactidy

@@ -1,0 +1,26 @@
+cask "mactidy" do
+  version "__VERSION__"
+  sha256 "__SHA256__"
+
+  url "https://github.com/huahuu1/MacTidy/releases/download/v#{version}/MacTidy-#{version}.dmg"
+  name "MacTidy"
+  desc "Clean junk, monitor CPU, heat and battery, and hide menu bar icons"
+  homepage "https://github.com/huahuu1/MacTidy"
+
+  depends_on macos: ">= :sonoma"
+
+  app "MacTidy.app"
+
+  # App chưa notarize: gỡ cờ quarantine để mở được ngay
+  postflight do
+    system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{appdir}/MacTidy.app"]
+  end
+
+  uninstall quit: "io.github.huahuu1.mactidy"
+
+  zap trash: [
+    "~/Library/Preferences/io.github.huahuu1.mactidy.plist",
+    "~/Library/Logs/MacTidy.log",
+    "~/Library/Caches/io.github.huahuu1.mactidy",
+  ]
+end

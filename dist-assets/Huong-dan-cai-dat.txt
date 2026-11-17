@@ -1,0 +1,90 @@
+MACTIDY: HƯỚNG DẪN CÀI ĐẶT
+===========================
+
+Yêu cầu
+-------
+- macOS 14 trở lên. Chạy được trên Mac chip Apple (M1 đến M4) và Mac chip Intel.
+- Gom icon thanh menu kiểu không để khoảng trống chỉ có trên macOS 27.
+  macOS cũ hơn vẫn gom được, nhưng dùng cách cũ.
+
+
+1. Cài app
+----------
+1. Mở file MacTidy-x.x.dmg.
+2. Kéo MacTidy vào thư mục Applications (bắt buộc là /Applications).
+   macOS 27 chỉ cho icon thanh menu của app trong /Applications hiện khi gom icon.
+   Cài ở chỗ khác thì chính MacTidy cũng bị ẩn.
+3. Đóng cửa sổ DMG và eject đĩa MacTidy.
+
+
+2. Mở lần đầu
+-------------
+App chưa được ký bằng chứng chỉ Apple Developer ID, nên macOS chặn lần mở đầu tiên
+(báo "không thể mở" hoặc "không xác minh được nhà phát triển"). Chọn MỘT trong hai cách:
+
+Cách A (dùng giao diện):
+  1. Mở MacTidy, bấm Xong khi macOS báo chặn.
+  2. Vào Cài đặt hệ thống > Quyền riêng tư & Bảo mật.
+  3. Kéo xuống phần Bảo mật, bấm "Vẫn mở" cạnh dòng MacTidy, nhập mật khẩu máy.
+
+Cách B (dùng Terminal), chạy lệnh này rồi mở app bình thường:
+  xattr -dr com.apple.quarantine /Applications/MacTidy.app
+
+
+3. Ngôn ngữ
+-----------
+MacTidy dùng theo ngôn ngữ của macOS (tiếng Việt hoặc tiếng Anh; ngôn ngữ khác thì hiện
+tiếng Anh). Muốn đổi: bấm nút quả địa cầu trên cùng thanh bên trái, hoặc bấm icon MacTidy
+trên thanh menu > ⚙ > Ngôn ngữ / Language. App tự mở lại với ngôn ngữ mới.
+
+
+4. Cấp quyền (chỉ khi dùng tính năng tương ứng)
+------------------------------------------------
+- Trợ năng (Accessibility): cần cho trang Gom icon thanh menu.
+  Cài đặt hệ thống > Quyền riêng tư & Bảo mật > Trợ năng > bật MacTidy.
+- Thông báo: để MacTidy báo khi máy nóng. macOS hỏi ở lần mở đầu.
+- Mở cùng máy: bấm icon MacTidy trên thanh menu > ⚙ > Mở cùng máy.
+
+
+5. Kết nối với Claude (cho nút "Hỏi AI")
+-----------------------------------------
+Nút "Hỏi AI" ở trang Dọn rác và File lớn gọi Claude Code (lệnh `claude`) đã cài trên
+CHÍNH MÁY ĐÓ. MacTidy không lưu tài khoản hay API key nào; mỗi máy dùng tài khoản
+Claude Code của máy đó, và chi phí tính vào tài khoản đó.
+
+Bước 1. Cài Claude Code (chọn một cách):
+  - Cách khuyên dùng, chạy trong Terminal:
+      curl -fsSL https://claude.ai/install.sh | bash
+  - Hoặc qua npm (cần Node.js 18 trở lên):
+      npm install -g @anthropic-ai/claude-code
+
+Bước 2. Đăng nhập: mở Terminal, gõ
+      claude
+  rồi làm theo hướng dẫn trên màn hình để đăng nhập tài khoản Claude
+  (gói Pro, Max, Team, Enterprise) hoặc tài khoản Claude Console (API).
+  Đăng nhập xong gõ /exit để thoát.
+
+Bước 3. Không cần cấu hình gì trong MacTidy. App tự tìm lệnh `claude` ở:
+      ~/.local/bin/claude
+      /opt/homebrew/bin/claude
+      /usr/local/bin/claude
+      ~/.claude/local/claude
+      thư mục bin của Node cài qua nvm
+  Nếu MacTidy đang mở trong lúc cài Claude Code, thoát MacTidy rồi mở lại.
+
+Bước 4. Kiểm tra: MacTidy > Dọn rác > Quét > rê chuột vào một mục > bấm "Hỏi AI".
+  Kết quả hiện ngay dưới mục đó, kèm chi phí của lần hỏi.
+
+Nếu nút "Hỏi AI" bị mờ: máy chưa có lệnh `claude`, làm lại Bước 1.
+Nếu báo lỗi đăng nhập: chạy `claude` trong Terminal để đăng nhập lại (Bước 2).
+
+Claude chỉ được ĐỌC file (công cụ Read, Glob, Grep). Claude không được chạy lệnh,
+không sửa hay xoá file. Xoá hay không vẫn do bạn bấm.
+
+
+6. Gỡ cài đặt
+-------------
+1. Bấm icon MacTidy trên thanh menu > ⚙ > Thoát MacTidy.
+2. Kéo /Applications/MacTidy.app vào Thùng rác.
+3. (Tuỳ chọn) xoá cài đặt: chạy trong Terminal
+      defaults delete io.github.huahuu1.mactidy
